@@ -1,3 +1,8 @@
+'''
+X_data와 y_data를 넣으면 Random forest regressor를 통해 가장 중요한 features를 반환합니다.
+중요도는 그래프로 나타나며, only_graph = False로 하면 feature간의 중요도, random forest의 decision trees간 표준편차와 중요도가 높은 순으로 feature의 index가 정렬된 값들이 반환됩니다.
+'''
+
 def featureImportanceForest(X_data, y_data, n_estimators, n_jobs,  min_samples_leaf = 1, graph_title = 'The Graph', random_state = 42, only_graph = True):
     from sklearn.ensemble import RandomForestRegressor
 
