@@ -1,0 +1,38 @@
+def featureImportanceForest(X_data, y_data, n_estimators, min_samples_leaf, n_jobs, random_state = 42, only_graph = True):
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from sklearn.ensemble import RandomForestRegressor
+
+    if only_graph == False:
+        try:
+            rfr = RandomForestRegressor(n_estimators = n_estimators, min_samples_leaf = min_samples_leaf, n_jobs = n_jobs, random_state = random_state)
+            rfr.fit(X_data, y_data)
+            importances = rfr.feature_importances_
+            std = np.std([tree.feature_importances_ for tree in rfr.estimators_], axis = 0)
+            indices = np.argsort(importances)[::-1]
+
+            plt.figure(figsize = (15,15))
+            plt.bar(range(X_data.shape[1]), importances[indices], color = 'r', yerr = std[indices], align = 'center')
+            plt.xticks(range(X_data.shape[1]), X_data.columns[indices], rotation = 90, fontsize = 13)
+            plt.show()
+            return np.array([importances, std, indices])
+
+        except ValueError:
+            print('Please check column(s) in data frame whether that includes object or NaN.')
+
+    else:
+        try:
+            rfr = RandomForestRegressor(n_estimators = n_estimators, min_samples_leaf = min_samples_leaf, n_jobs = n_jobs, random_state = random_state)
+            rfr.fit(X_data, y_data)
+            importances = rfr.feature_importances_
+            std = np.std([tree.feature_importances_ for tree in rfr.estimators_], axis = 0)
+            indices = np.argsort(importances)[::-1]
+
+            plt.figure(figsize = (15,15))
+            plt.bar(range(X_data.shape[1]), importances[indices], color = 'r', yerr = std[indices], align = 'center')
+            plt.xticks(range(X_data.shape[1]), X_data.columns[indices], rotation = 90, fontsize = 13)
+            plt.show()
+        except ValueError:
+            print('Please check column(s) in data frame whether that includes object or NaN.')
+        # except pd.core.Indexing.IndexingError:
+        #     print('Please check range of y_data, if y_data is Series you never write 2nd colon that means columns')
