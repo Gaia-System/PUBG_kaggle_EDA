@@ -1,6 +1,4 @@
 def featureImportanceForest(X_data, y_data, n_estimators, n_jobs,  min_samples_leaf = 1, graph_title = 'The Graph', random_state = 42, only_graph = True):
-    import matplotlib.pyplot as plt
-    import numpy as np
     from sklearn.ensemble import RandomForestRegressor
 
     if only_graph == False:
@@ -20,6 +18,12 @@ def featureImportanceForest(X_data, y_data, n_estimators, n_jobs,  min_samples_l
 
         except ValueError:
             print('Please check column(s) in data frame whether that includes object or NaN.')
+        except NameError:
+            print(
+                'Please import modules \n'
+                'import numpy as np \n'
+                'import matplotlib.pyplot as plt'
+            )
 
     else:
         try:
@@ -36,5 +40,11 @@ def featureImportanceForest(X_data, y_data, n_estimators, n_jobs,  min_samples_l
             plt.show()
         except ValueError:
             print('Please check column(s) in data frame whether that includes object or NaN.')
-        # except pd.core.Indexing.IndexingError:    # I think the IndexingError isn't default error type in python.
+        except NameError:
+            print(
+                'Please import modules \n'
+                'import numpy as np \n'
+                'import matplotlib.pyplot as plt'
+            )
+        # except pd.core.Indexing.IndexingError:    # I think the IndexingError isn't default error type in pure python.
         #     print('Please check range of y_data, if y_data is Series you never write 2nd colon that means columns')
