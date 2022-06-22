@@ -27,8 +27,8 @@ class RegressionModels:
         return X_train, X_test, y_train, y_test
 
     def linear_regressor(self, X_train, X_test, y_train, y_test):
-        model = LinearRegression().fit(X_train[self.feature_list], y_train)
-        pred_linear = model.predict(X_test[self.feature_list])
+        model_linear = LinearRegression().fit(X_train[self.feature_list], y_train)
+        pred_linear = model_linear.predict(X_test[self.feature_list])
         mae = mean_absolute_error(pred_linear, y_test)
         mse = mean_squared_error(pred_linear, y_test)
         r2 = r2_score(pred_linear, y_test)
@@ -38,8 +38,8 @@ class RegressionModels:
         return pred_linear, [np.round(mae, 4), np.round(mse, 4), np.round(r2, 4)]
 
     def random_forest_regressor(self, X_train, X_test, y_train, y_test, n_estimators = 100):
-        model = RandomForestRegressor(n_estimators = n_estimators).fit(X_train[self.feature_list], y_train)
-        pred_rf = model.predict(X_test[self.feature_list])
+        model_rf = RandomForestRegressor(n_estimators = n_estimators).fit(X_train[self.feature_list], y_train)
+        pred_rf = model_rf.predict(X_test[self.feature_list])
         mae = mean_absolute_error(pred_rf, y_test)
         mse = mean_squared_error(pred_rf, y_test)
         r2 = r2_score(pred_rf, y_test)
@@ -48,19 +48,19 @@ class RegressionModels:
         print(f'RandomForestRegressor {self.feature_list} R2 : {r2:.4f}')
         return pred_rf, [np.round(mae, 4), np.round(mse, 4), np.round(r2, 4)]
 
-    def lightGBM_redressor(self, X_train, X_test, y_train, y_test, num_iteration, n_estimators = 2000, **kwargs): # I can't bet this code, Is lightGBM same other models?
-        model = lgb.LGBMRegressor(**kwargs, n_estimators = n_estimators).fit(X_train, y_train)
-        pred_lgbm = model.predict(X_test, num_iteration = num_iteration)
-        mae = mean_absolute_error(pred_lgbm, y_test)
-        mse = mean_squared_error(pred_lgbm, y_test)
-        r2 = r2_score(pred_lgbm, y_test)
+    def lightGBM_redressor(self, X_train, X_test, y_train, y_test, num_boost_round = 1000, **kwargs):
+        print(f"your LGBM's parameters are : {kwargs}")
+        lgb_train = lgb.Dataset(X_train[self.feature_list], label = y_train)
+        lgb_test = lgb.Dataset(X_test[self.feature_list], label = y_test)
+        model_lgb = lgb.LGBMRegressor(**kwargs, lgb_train, num_boost_round, lgb_test, vetbose_eval = 100, early_stopping_rounds = 100)
+        pred_lgb = model_lgb.predict(X_test[self.feature_list])
+        mae = mean_absolute_error(pred_lgb, y_test)
+        mse = mean_squared_error(pred_lgb, y_test)
+        r2 = r2_score(pred_lgb, y_test)
         print(f'LGBMRegressor {self.feature_list} MAE : {mae:.4f}')
         print(f'LGBMRegressor {self.feature_list} MSE : {mse:.4f}')
         print(f'LGBMRegressor {self.feature_list} R2 : {r2:.4f}')
-        return pred_lgbm, [np.round(mae, 4), np.round(mse, 4), np.round(r2, 4)]
-
-    def ploting(self, data, x_axis, ): # 그래프를 자동으로 뽑아주는 코드 공사중
-        pass
+        return pred_lgb, [np.round(mae, 4), np.round(mse, 4), np.round(r2, 4)]
 
 
 # e.g.)
